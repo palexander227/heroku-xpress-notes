@@ -2,12 +2,12 @@
 const router = require('express').Router();
 const util = require('util');
 const fs = require('fs');
-const {v4: uuidv4} = require('uuid');
+const {v4: uuidv4} = require('uuid'); //- uuid has many features; don't look at everything, look at the v4
 
 // function definitions
 //- Note: readFile and writeFile use 'promisify' to prevent 'deep nesting' by
 //- changing call-backs to promises. 
-const readFile = util.promisify(fs.readFile);
+const readFile = util.promisify(fs.readFile); //- any cb can be converted into a promise, util.promisify does the work for us
 const writeFile = util.promisify(fs.writeFile);
 
 const read = () => {
@@ -18,25 +18,40 @@ const write = (note) => {
     return writeFile('db/db.json', JSON.stringify(note));
 };
 
+// const listNotes = () => {
+//     //- By returning read() instead of the result of read, we continue the promise chain.
+//     return read().then((n)=>{
+//         let notes
+//         try{
+//             notes = [].concat(JSON.parse(n))
+//         }
+//         catch(err){notes = []}
+//         return notes
+//     });
+// };
+
+
+
 const listNotes = () => {
     //- By returning read() instead of the result of read, we continue the promise chain.
     return read().then((n)=>{
-        let notes
+        let notes = [];
         try{
-            notes = [].concat(JSON.parse(n))
+            const stnt = JSON.parse(n);
+            notes = [...stnt];
         }
-        catch(err){notes = []}
+        catch(err){console.log('something went wrong')}
         return notes
     });
 };
 
 
 //addNote turns the incoming data into a form which can be merged with the database
-const addNote = note =>{
-    let {title, text} = note
+//? addNote is a mapping from JSON objects to itself
+const addNote = note =>{    
     // if(!title || !text){throw new Error("You must enter a title AND text!")} // user validation at interface
     // using id here is useful for the delete function if we get to that   
-    let newNote = {id:uuidv4(), title, text}
+    let newNote = {id:uuidv4(), title: note.title, text: note.text}
     return listNotes()
            .then(allNotes => [...allNotes, newNote])
            .then(newNotes => write(newNotes))

@@ -8,7 +8,7 @@ router.get('/notes', (req, res) =>{
     res.sendFile(path.join(__dirname, '../public/notes.html'))
 } );
 
-// catch for any thing missed above
+// catch for any thing missed above, no 404 error, just return to home page
 router.get('*', (req, res) =>{
     res.sendFile(path.join(__dirname, '../public/index.html'));
 } );
