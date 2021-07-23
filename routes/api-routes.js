@@ -18,36 +18,27 @@ const write = (note) => {
     return writeFile('db/db.json', JSON.stringify(note));
 };
 
-// const listNotes = () => {
-//     //- By returning read() instead of the result of read, we continue the promise chain.
-//     return read().then((n)=>{
-//         let notes
-//         try{
-//             notes = [].concat(JSON.parse(n))
-//         }
-//         catch(err){notes = []}
-//         return notes
-//     });
-// };
 
 
-
+// reads notes from db, returns resulting array of objects ... 'notes'
+// a mapping on arrays of note objects
 const listNotes = () => {
     //- By returning read() instead of the result of read, we continue the promise chain.
     return read().then((n)=>{
         let notes = [];
         try{
             const stnt = JSON.parse(n);
-            notes = [...stnt];
+            notes = [...stnt];            
         }
-        catch(err){console.log('something went wrong')}
+        catch(err){return []}
         return notes
     });
 };
 
 
+
 //addNote turns the incoming data into a form which can be merged with the database
-//? addNote is a mapping from JSON objects to itself
+// addNote is a mapping from JSON objects to itself
 const addNote = note =>{    
     // if(!title || !text){throw new Error("You must enter a title AND text!")} // user validation at interface
     // using id here is useful for the delete function if we get to that   
@@ -59,30 +50,42 @@ const addNote = note =>{
 };
 
 
-//- nested routes '/api/notes'
+
+// delete a note matching the given id number
+const deleteNote = uuidFromRoute => {
+    if(!uuidFromRoute){throw new Error('No ID passed.')}
+    return listNotes()
+           .then(notes => notes.filter(note => note.id !== uuidFromRoute))
+           .then(newNotes => write(newNotes));
+        //    .then((n) => n);
+}        
+
+
+
+//- nested routes '/api/notes' and returns list of stored notes
+//- i.e., 'current' notes
 router.get('/notes', (req, res) =>{
    listNotes()
         .then((n)=>{return res.json(n)})
         .catch((err) =>{res.status(500).json(err)})
 });
 
+
+//- adds individual 'note' object to stored note database
 router.post('/notes', (req, res) =>{
     
    addNote(req.body)
         .then((n)=>{return res.json(n)})
         .catch((err) =>{res.status(500).json(err)})
-
 });
 
 
-
-// router.delete('/notes/:id', (req, res) => {
-
-
-// }
-
-
-// )
+//- deletes a note 'object' from the notes database
+router.delete('/notes/:id', (req, res) => {
+    deleteNote(req.params.id)
+    .then(n=> res.status(200).json(n))
+    .catch((err) =>{res.status(500).json(err)})
+})
 
 
 

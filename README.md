@@ -24,7 +24,7 @@ in mind, it never went to 'press' and probably never will. It is free, free to u
 ___
 ### User Experience
 
-After starting app, you will get a chance to add your own notes like the one shown below. You can enter and save as many notes
+After starting the app, you will get a chance to add your own notes like the one shown below. You can enter and save as many notes
 as you like. Just be careful of what you enter. As of this day (22, July 2021), the 'delete' feature is not yet operational. That
 is the next task at hand.
 
