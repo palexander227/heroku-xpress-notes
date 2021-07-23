@@ -4,10 +4,10 @@
 I am sick of wasting time fiddling with my iPhone's *notes* when the interface freezes. I am tired of being a slave to 
 technology which should be serving me! If you are like me, you might find it kind of nice when an app is really 
 simple, easy to use and dependable. This one is as simple as it gets without going to the command line, or a pocket pad.
-...
+___
  
  
-                    ![](img/frontpage.png)(width=200) 
+![](img/frontpage.png) 
 
 You might want to check this idea out. [Heroku XPress Notetaker.](https://heroku-xpress-notes.herokuapp.com/.) This might be a solution
 for you if you, like me, are tired of overloaded apps. The cloud is the way to go. This app is light, fast and extremely easy to use.
